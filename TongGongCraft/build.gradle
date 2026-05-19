@@ -1,0 +1,33 @@
+plugins {
+    id 'java'
+    id 'org.springframework.boot' version '4.0.5'
+    id 'io.spring.dependency-management' version '1.1.7'
+}
+
+group = 'com.example'
+version = '0.0.1-SNAPSHOT'
+description = 'TongGongCraft'
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
+}
+
+repositories {
+    mavenCentral()
+    // 国内镜像，加速依赖下载，解决网络问题
+    maven { url 'https://maven.aliyun.com/repository/public' }
+}
+
+dependencies {
+    // Neo4j官方Starter，自动注入Driver Bean，解决Bean报错
+    implementation 'org.springframework.boot:spring-boot-starter-neo4j'
+    // Spring Web，网页接口依赖
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    // 测试依赖
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+}

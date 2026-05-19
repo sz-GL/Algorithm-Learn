@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>铜管工艺卡自动生成系统</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: "Microsoft Yahei", sans-serif; }
+        body { background: #f5f5f5; padding: 50px; }
+        .container { max-width: 800px; margin: 0 auto; background: #fff; padding: 40px; border-radius: 10px; box-shadow: 0 0 20px rgba(0,0,0,0.1); }
+        h1 { color: #2c3e50; text-align: center; margin-bottom: 30px; }
+        .upload-box { border: 2px dashed #3498db; border-radius: 8px; padding: 40px; text-align: center; margin-bottom: 30px; cursor: pointer; transition: all 0.3s; }
+        .upload-box:hover { border-color: #2980b9; background: #f8f9fa; }
+        #fileInput { display: none; }
+        .btn { background: #3498db; color: #fff; border: none; padding: 12px 30px; border-radius: 5px; font-size: 16px; cursor: pointer; transition: all 0.3s; }
+        .btn:hover { background: #2980b9; }
+        .result-box { margin-top: 30px; padding: 20px; background: #f8f9fa; border-radius: 8px; display: none; }
+        .result-box h3 { color: #27ae60; margin-bottom: 15px; }
+        .process-card { line-height: 1.8; white-space: pre-line; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>铜管工艺卡自动生成系统</h1>
+    <div class="upload-box" id="uploadBox">
+        <h3>点击或拖拽上传铜管生产任务书</h3>
+        <p>支持格式：.docx .pdf .txt</p>
+        <input type="file" id="fileInput" accept=".docx,.pdf,.txt">
+        <button class="btn" id="uploadBtn" style="margin-top: 20px;">上传并生成工艺卡</button>
+    </div>
+    <div class="result-box" id="resultBox">
+        <h3>✅ 工艺卡生成成功</h3>
+        <div class="process-card" id="processCard"></div>
+    </div>
+</div>
+
+<script>
+    const fileInput = document.getElementById('fileInput');
+    const uploadBox = document.getElementById('uploadBox');
+    const uploadBtn = document.getElementById('uploadBtn');
+    const resultBox = document.getElementById('resultBox');
+    const processCard = document.getElementById('processCard');
+
+    // 点击上传框触发文件选择
+    uploadBox.addEventListener('click', () => fileInput.click());
+
+    // 拖拽上传
+    uploadBox.addEventListener('dragover', (e) => {
+        e.preventDefault();
+        uploadBox.style.borderColor = '#2980b9';
+    });
+    uploadBox.addEventListener('dragleave', () => {
+        uploadBox.style.borderColor = '#3498db';
+    });
+    uploadBox.addEventListener('drop', (e) => {
+        e.preventDefault();
+        fileInput.files = e.dataTransfer.files;
+    });
+
+    // 上传文件
+    uploadBtn.addEventListener('click', async () => {
+        const file = fileInput.files[0];
+        if (!file) {
+            alert('请先选择文件！');
+            return;
+        }
+
+        const formData = new FormData();
+        formData.append('file', file);
+
+        try {
+            const response = await fetch('/upload', {
+                method: 'POST',
+                body: formData
+            });
+            const result = await response.text();
+
+            // 显示结果
+            resultBox.style.display = 'block';
+            processCard.innerHTML = result.replace(/\n/g, '<br>');
+        } catch (error) {
+            alert('上传失败：' + error.message);
+        }
+    });
+</script>
+</body>
+</html>
