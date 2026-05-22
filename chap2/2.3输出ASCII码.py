@@ -1,0 +1,8 @@
+print(chr(98))
+print('b')
+print(chr(67))
+print('[')
+print(chr(91))
+print(ord('北'))
+print(ord('京'))
+print(chr(21271),chr(20140))

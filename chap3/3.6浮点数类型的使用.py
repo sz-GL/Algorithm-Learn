@@ -1,0 +1,10 @@
+height=187.6#身高
+print(type(height))#查看变量的数据类型
+x=10
+y=10.0
+print('x的数据类型是',type(x))
+print('y的数据类型是',type(y))
+print(round(0.1+0.2,1))#对0.1+0.2的结果作保留1位小数处理
+'''
+用.real表示实数部分，用.imag表示虚数部分
+'''
